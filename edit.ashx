@@ -85,7 +85,8 @@ public class edit : IHttpHandler
                 str = ReadStream(context.Server.MapPath("/subject/edit/newspaper/tpl/index.tpl"), code);
                 string repeaterStrCont = "";
                 string repeaterStr = ReadStream(context.Server.MapPath("/subject/edit/newspaper/tpl/repeater.tpl"), code);
-                str = str.Replace("{$date}", path.Substring(11, 2) + "月" + path.Substring(13, 2) + "日");
+                string rootAttribute = root.Attribute("title").Value;
+                str = str.Replace("{$date}", ((rootAttribute == "每周旅游快报") ? "" : (path.Substring(11, 2) + "月" + path.Substring(13, 2) + "日")) + rootAttribute);
                 int count = 0;
                 XElement groupElement;
                 for (int i = 0; i < groupCount; i++)

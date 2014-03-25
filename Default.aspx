@@ -6,8 +6,7 @@
     <title>报纸生成页</title>
     <!-- Our CSS stylesheet file -->
     <link rel="stylesheet" href="styles.css" />
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
-    <script>        !window.jQuery && document.write('<script src="/Static/scripts/jquery-1.7.2.min.js"><\/script>');</script>
+    <script src="/Static/scripts/jquery-1.7.2.min.js" type="text/javascript"></script>
     <style>
         #loading_unit
         {
@@ -57,7 +56,7 @@
 </head>
 <body>
     <h1>
-        报纸生成页<i>(请使用现代浏览器)</i>v1.0.0 更新日期20131128</h1>
+        报纸生成页<i>(请使用现代浏览器)</i>v1.1.0 更新日期20140325<i>（更新内容：支持生成每周旅游快报）</i></h1>
     <h2>
         <%=title %></h2>
     <form id="form1" runat="server">

@@ -18,6 +18,7 @@ public partial class subject_edit_newspaper_Default : System.Web.UI.Page
     public string dayName = DateTime.Now.AddDays(1).ToString("yyMMdd");
     public string title;
     public XDocument _data = null;
+    public XElement root = null;
     public int groupCount = 0;
     public Encoding code = Encoding.GetEncoding("gb2312");
     public string btnText = "新建文件夹";
@@ -35,7 +36,7 @@ public partial class subject_edit_newspaper_Default : System.Web.UI.Page
             btnText = "生成网页";
             path = System.Web.HttpUtility.UrlDecode(Request["file"]);
             fullPath = Server.MapPath("/subject/" + path + "/");
-            title = "20" + path.Substring(0, 2) + "年" + path.Substring(2, 2) + "月" + path.Substring(4, 2) + "日报纸内容";
+            
             tips.InnerHtml = "请上传报纸图片到目录/subject/" + path + "/raw/下<br /><i>(完成后请刷新页面查看)</i>";
             DirectoryInfo folder = new DirectoryInfo(fullPath);
             FileInfo[] raw_file = null;
@@ -44,8 +45,7 @@ public partial class subject_edit_newspaper_Default : System.Web.UI.Page
                 raw_file = folder.GetFiles("raw/*.jpg");
                 if (raw_file.Count() > 0)
                 {
-                    _data = new XDocument(new XElement("root", new XElement("group", new XAttribute("type", "出境游")), new XElement("group", new XAttribute("type", "国内游")), new XElement("group", new XAttribute("type", "周边游"))));
-                    XElement root = _data.Elements("root").First();
+
                     tips.InnerHtml = "";
                     List<string> pattern = new List<string>(3);
                     string namepattern = @"Q_([^\.]+)";
@@ -54,26 +54,52 @@ public partial class subject_edit_newspaper_Default : System.Web.UI.Page
                     pattern.Add(@"（*广州日报）*国内");
                     pattern.Add(@"（*广州日报）*省内");
                     int count = 0;
-                    foreach (FileInfo file in raw_file)
+                    
+                    if (MatchString(raw_file[0].Name, @"广州日报") != "未命名")
                     {
-                        for (int i = 0; i < pattern.Count; i++)
+                        title = "20" + path.Substring(0, 2) + "年" + path.Substring(2, 2) + "月" + path.Substring(4, 2) + "日报纸内容";
+                        _data = new XDocument(new XElement("root", new XAttribute("title", "报纸广告"), new XElement("group", new XAttribute("type", "出境游")), new XElement("group", new XAttribute("type", "国内游")), new XElement("group", new XAttribute("type", "周边游"))));
+                        root = _data.Elements("root").First();
+                        foreach (FileInfo file in raw_file)
                         {
-                            if (MatchString(file.Name, pattern[i]) != "未命名")
+                            for (int i = 0; i < pattern.Count; i++)
                             {
-                                root.Elements().ElementAt(i).Add(new XElement("item", MatchString(file.Name, namepattern)));
-                                break;
-                            }
-                            else if (i == pattern.Count - 1)
-                            {
-                                var newName = MatchString(file.Name, allpattern);
-                                root.Add(new XElement("group", new XAttribute("type", newName), new XElement("item", MatchString(file.Name, namepattern))));
-                                pattern.Add(@"（*广州日报）*" + newName);
-                                break;
+                                if (MatchString(file.Name, pattern[i]) != "未命名")
+                                {
+                                    root.Elements().ElementAt(i).Add(new XElement("item", MatchString(file.Name, namepattern)));
+                                    break;
+                                }
+                                else if (i == pattern.Count - 1)
+                                {
+                                    var newName = MatchString(file.Name, allpattern);
+                                    root.Add(new XElement("group", new XAttribute("type", newName), new XElement("item", MatchString(file.Name, namepattern))));
+                                    pattern.Add(@"（*广州日报）*" + newName);
+                                    break;
+                                }
                             }
                         }
                     }
-                    foreach (XElement g in root.Elements()) {
-                        if (g.Elements().Count() == 0) {
+                    else if (MatchString(raw_file[0].Name, @"每周旅游快报") != "未命名")
+                    {
+                        title = "20" + path.Substring(0, 2) + "年" + path.Substring(2, 2) + "月" + path.Substring(4, 2) + "日每周旅游快报内容";
+                        _data = new XDocument(new XElement("root", new XAttribute("title", "每周旅游快报")));
+                        root = _data.Element("root");
+                        root.Add(new XElement("title", "每周旅游快报"));
+                        root.Add(new XElement("group", new XAttribute("type", "")));
+                        foreach (FileInfo file in raw_file)
+                        {
+                            root.Element("group").Add(new XElement("item", "每周旅游快报"));
+                        }
+                    }
+                    else
+                    {
+                        Response.Write("<script>alert('文件名称格式错误，请检查文件名!');window.location = '/subject/edit/newspaper/default.aspx';</script>");
+                    }
+
+                    foreach (XElement g in root.Elements())
+                    {
+                        if (g.Elements().Count() == 0)
+                        {
                             g.Remove();
                         }
                     }

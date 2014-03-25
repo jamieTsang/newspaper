@@ -7,7 +7,7 @@
 
 <body>
 <div style="width:670px; margin:0px auto;">
-<div style="width:660px; height:39px; background:url(http://www.gzl.com.cn/subject/NewsData/120305newspaper/date_bg.jpg); margin:0px auto;"> <span style="font:20px/36px 'microsoft yahei', 'SimHei'; color:#585858; margin:0px auto; padding-left:250px;">{$date}报纸广告</span> </div>
+<div style="width:660px; height:39px; background:url(http://www.gzl.com.cn/subject/NewsData/120305newspaper/date_bg.jpg); margin:0px auto;"> <span style="font:20px/36px 'microsoft yahei', 'SimHei'; color:#585858; margin:0px auto; padding-left:250px;">{$date}</span> </div>
     <div style="width:670px; height:9px; background:url(http://www.gzl.com.cn/subject/NewsData/120305newspaper/bg_top.jpg) top center no-repeat; overflow:hidden; position:relative;"> <span style="width:19px; height:9px; display:block; background:url(http://www.gzl.com.cn/subject/NewsData/120305newspaper/icon_point.jpg); position:absolute; top:0px; left:68px;"></span> </div>
     <div style="width:670px; background:url(http://www.gzl.com.cn/subject/NewsData/120305newspaper/bg_body.jpg) center repeat-y; overflow:hidden; margin:0px auto;">
 		{$newsRepeater}
